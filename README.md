@@ -299,8 +299,6 @@ If a test cannot produce reliable results, it reduces confidence in the tests an
 
 🔗 [**Read More: Reaching UI state**](./sections/advanced/reaching-ui-state.md)
 
-<br/>
-reaching UI state for tests without using the UI
 
 <br/><br/>
 
