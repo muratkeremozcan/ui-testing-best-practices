@@ -7,11 +7,11 @@
 It adds value to cover a ui-e2e scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a ui-e2e test. Scenarios like this are excellent for utilizing certain techniques:
 
 * Direct navigation
-* Network stub record & play 
+* Network stub record & play
 * Application actions
 * Seeding the database
 
-> Disclamer: applications of the whole package of these techniques are only possible in Cypress (as far as we know), consequently the code samples below are are in Cypress context.
+> Disclaimer: applications of the whole package of these techniques are only possible in Cypress (as far as we know), consequently the code samples below are are in Cypress context.
 
 <br/><br/>
 
@@ -21,7 +21,7 @@ This is the easiest technique and is applicable in any framework. Suppose the in
 
 ```javascript
 // Test A covers click-navigation to a certain page.
-// This is Test B, and navigating to that page is the prerquisite step.
+// This is Test B, and navigating to that page is the prerequisite step.
 
 // assuming baseUrl is set in cypress.json or config file
 // directly navigate to the page.
@@ -40,7 +40,7 @@ cy.server();  // required to use cy.route
 cy.route('some-xhr-call-that-happens-upon-landing').as('crutcXHR');
 cy.wait('@crutchXHR', {timeout: 15000}); // can add an optional timeout if the page takes too long
 
-// ui-elment wait is straightforward, and may be optional, as well as less stable)
+// ui-element wait is straightforward, and may be optional, as well as less stable)
 cy.get('element-on-page').should('exist').and('be.visible');
 
 ```
@@ -50,7 +50,7 @@ cy.get('element-on-page').should('exist').and('be.visible');
 ### Network stub record & play
 This is an advanced technique that strongly relates to UI-integration tests. Recall UI-integration references [1](../testing-strategy/component-vs-integration-vs-e2e-testing.md), [2](../real-life-examples/test-front-end-with-integration-back-end-with-e2e.md).
 
-Cypress allows to stub all network straffic. We can record the network data from an endpoint, and stub that response every time the UI makes a call to an arbitrary server.
+Cypress allows to stub all network traffic. We can record the network data from an endpoint, and stub that response every time the UI makes a call to an arbitrary server.
 
 Start by copying the network data from devTools to a json file. Place it in `cypress/fixtures` folder. This folder is made for this purpose, and any reference to it will default to the root of the folder.
 
@@ -124,9 +124,9 @@ function visitStubbedState(stubFile, url, wait: boolean = true) {
 // recording network
 it('should run your test', function () {
   stubrecorder('jsonfileNameForNetworkData');
-  
+
   // your original test
-  
+
   cy.wait(5000); // 1 time wait so tha the after() step records all the network without missing anything
 });
 
@@ -135,7 +135,7 @@ it('should run your test', function () {
   // every time we visit this endpoint, all network will be stubbed
   // double check this by observing (XHR stubbed) network responses in the test runner
   visitStubbedState('jsonfileNameForNetworkData', '/endpoint');
-  
+
   // the rest of your original test
 });
 ```
@@ -156,9 +156,9 @@ Here is a quick example of how you would allow source code access to Cypress in 
 ```javascript
 // Angular Component file example
 /* setup:
- 0. Identify the component in the DOM;  
-  inspect and find the corresponding <app.. tag, 
-  then find the component in src 
+ 0. Identify the component in the DOM;
+  inspect and find the corresponding <app.. tag,
+  then find the component in src
  1. Insert conditional */
 constructor(
   /* ... */
@@ -173,11 +173,11 @@ constructor(
 // at ../../support/app-actions.ts helper file:
 
 /** yields  window.yourComponent */
-export const yourComponent = () => 
+export const yourComponent = () =>
   cy.window().should('have.property', 'yourComponent');
 
 /** yields the data property on your component */
-export const getSomeListData = () => 
+export const getSomeListData = () =>
  yourComponent().should('have.property', 'data');
 ```
 After this at DevTools see what that component allows for properties, or in the component code see what functions you can .invoke()
@@ -186,7 +186,7 @@ Check out [the presentation slide](https://cypress.slides.com/cypress-io/siemens
 
 #### Another example on app actions utilizing states, using [Building Operator](https://new.siemens.com/us/en/products/buildingtechnologies/automation/talon/software/building-operator.html?stc=ussi100451&sp_source=ussi100451&&s_kwcid=AL!464!3!435315652461!b!!g!!%2Bbuilding%20%2Boperator&ef_id=CjwKCAjw8df2BRA3EiwAvfZWaAsQmgot5Ph-nGBB8rW1QLLr870q2HW-qzMKhqtQb1QvlPBVJxho5BoCmtMQAvD_BwE:G:s) building control product of Siemens.
 
-In the below state diagram there are 3 states. We begin where both left and right panes exist. If the right pane is deleted (delete point / red flow), only the left pane exists. If the left pane is deleted (delete device - blue flow), both panes go away and the UI get redirected. 
+In the below state diagram there are 3 states. We begin where both left and right panes exist. If the right pane is deleted (delete point / red flow), only the left pane exists. If the left pane is deleted (delete device - blue flow), both panes go away and the UI get redirected.
 
 ![deleting building points and controllers](../../assets/images/ui-state/delete-states.PNG)
 
@@ -196,12 +196,12 @@ We already covered deleting the right pane in a UI test (red path). Why not avoi
 
 ```javascript
 it('Component test: delete right pane and then left', () => {
-  /* tests a SEQUENCE not covered with UI tests 
+  /* tests a SEQUENCE not covered with UI tests
    * tests a COMBINATION of components */
   appAction.deleteRightPane();
   cy.window().should('not.have.property', 'rightPaneComponent');
   cy.window().should('have.property', 'leftPaneComponent');
-  
+
   appAction.deleteLeftPane();
   cy.window().should('not.have.property', 'leftPaneComponent');
   cy.window().should('not.have.property', 'rightPaneComponent');
@@ -212,10 +212,9 @@ it('Component test: delete right pane and then left', () => {
 
 ### Seeding the database
 
-Cypress [`cy.task()`](https://docs.cypress.io/api/commands/task.html#Requirements) is very powerful. Effectively, it allows you to use NodeJs within the context of Cypress. This can be anything from NodeJs code, to using an npm package to manipulating the database. If you use Node.js for your app, you can re-use your app code to help set up and manipulate data for your tests. 
+Cypress [`cy.task()`](https://docs.cypress.io/api/commands/task.html#Requirements) is very powerful. Effectively, it allows you to use NodeJs within the context of Cypress. This can be anything from NodeJs code, to using an npm package to manipulating the database. If you use Node.js for your app, you can re-use your app code to help set up and manipulate data for your tests.
 
 There is a [Cypress recipe](https://github.com/cypress-io/cypress-example-recipes/tree/master/examples/server-communication__seeding-database-in-node) on this topic and we will end with that reference.
 
 
 <br/><br/>
-
