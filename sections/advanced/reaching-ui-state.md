@@ -4,7 +4,7 @@
 
 ### One Paragraph Explainer
 
-It adds value to cover a ui-e2e scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a ui-e2e test. Scenarios like this are excellent for utilizing certain techniques:
+It adds value to cover a UI scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a UI test. Scenarios like this are excellent for utilizing certain techniques:
 
 * Direct navigation
 * Network stub record & play
@@ -127,7 +127,9 @@ it('should run your test', function () {
 
   // your original test
 
-  cy.wait(5000); // 1 time wait so tha the after() step records all the network without missing anything
+  cy.wait(5000); // one-time wait so that the after() step records all the network without missing anything
+
+  // the rest of your original test
 });
 
 // playing the stubbed network
@@ -145,7 +147,7 @@ it('should run your test', function () {
 
 ### Application actions
 
-Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from you application) access the UI directly via `cy.get()` , have access to the API and database, and even access the source code.
+Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from your application) access the UI directly via `cy.get()` , have access to the API and database, and even access the source code.
 
 Component testing is an experimental feature in Cypress as of version 4.7.0, albeit some of the functionality is available. Refer to component testing articles under tools section for experiments with React and Storybook on this topic.
 
@@ -190,7 +192,7 @@ In the below state diagram there are 3 states. We begin where both left and righ
 
 ![deleting building points and controllers](../../assets/images/ui-state/delete-states.PNG)
 
-Testing the UI, you might chose to delete the right pane (red flow) and then in another test you might choose to delete the left pane (blue flow). This leaves out 1 final path through the state diagram where right pane and then left pane are deleted one at a time.
+Testing the UI, you might choose to delete the right pane (red flow) and then in another test you might choose to delete the left pane (blue flow). This leaves out 1 final path through the state diagram where right pane and then left pane are deleted one at a time.
 
 We already covered deleting the right pane in a UI test (red path). Why not avoid repeating this test and utilize app app actions, getting access to the delete function in the source code and using `cy.invoke()` to call it?
 
