@@ -4,14 +4,14 @@
 
 ### One Paragraph Explainer
 
-It adds value to cover a ui-e2e scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a ui-e2e test. Scenarios like this are excellent for utilizing certain techniques:
+It adds value to cover a UI scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a UI test. Scenarios like this are excellent for utilizing certain techniques:
 
 * Direct navigation
-* Network stub record & play 
+* Network stub record & play
 * Application actions
 * Seeding the database
 
-> Disclamer: applications of the whole package of these techniques are only possible in Cypress (as far as we know), consequently the code samples below are are in Cypress context.
+> Disclaimer: applications of the whole package of these techniques are only possible in Cypress (as far as we know), consequently the code samples below are are in Cypress context.
 
 <br/><br/>
 
@@ -21,7 +21,7 @@ This is the easiest technique and is applicable in any framework. Suppose the in
 
 ```javascript
 // Test A covers click-navigation to a certain page.
-// This is Test B, and navigating to that page is the prerquisite step.
+// This is Test B, and navigating to that page is the prerequisite step.
 
 // assuming baseUrl is set in cypress.json or config file
 // directly navigate to the page.
@@ -44,7 +44,7 @@ cy.route('some-xhr-call-that-happens-upon-landing').as('crutcXHR');
 // The only caveat to increasing timeout is that the tests will take longer to fail, but still run as fast as possible when things work.
 cy.wait('@crutchXHR', {timeout: 15000}); 
 
-// ui-elment wait is straightforward, and may be optional, as well as less stable)
+// ui-element wait is straightforward, and may be optional, as well as less stable)
 cy.get('element-on-page').should('exist').and('be.visible');
 
 ```
@@ -138,7 +138,7 @@ The real power of application actions comes out when combining application actio
 ### Network stub record & play
 This is an advanced technique that strongly relates to UI-integration tests. Recall UI-integration references [1](../testing-strategy/component-vs-integration-vs-e2e-testing.md), [2](../real-life-examples/test-front-end-with-integration-back-end-with-e2e.md).
 
-Cypress allows to stub all network straffic. We can record the network data from an endpoint, and stub that response every time the UI makes a call to an arbitrary server.
+Cypress allows to stub all network traffic. We can record the network data from an endpoint, and stub that response every time the UI makes a call to an arbitrary server.
 
 Start by copying the network data from devTools to a json file. Place it in `cypress/fixtures` folder. This folder is made for this purpose, and any reference to it will default to the root of the folder.
 
@@ -214,10 +214,12 @@ function visitStubbedState(stubFile, url, wait: boolean = true) {
 // recording network
 it('should run your test', function () {
   stubrecorder('jsonfileNameForNetworkData');
-  
+
   // your original test
-  
-  cy.wait(5000); // 1 time wait so tha the after() step records all the network without missing anything
+
+  cy.wait(5000); // one-time wait so that the after() step records all the network without missing anything
+
+  // the rest of your original test
 });
 
 // playing the stubbed network
@@ -225,7 +227,7 @@ it('should run your test', function () {
   // every time we visit this endpoint, all network will be stubbed
   // double check this by observing (XHR stubbed) network responses in the test runner
   visitStubbedState('jsonfileNameForNetworkData', '/endpoint');
-  
+
   // the rest of your original test
 });
 ```
@@ -241,10 +243,9 @@ The engineers have to realize that the strength can be a curse if misused. The U
 
 ### Seeding the database
 
-Cypress [`cy.task()`](https://docs.cypress.io/api/commands/task.html#Requirements) is very powerful. Effectively, it allows you to use NodeJs within the context of Cypress. This can be anything from NodeJs code, to using an npm package to manipulating the database. If you use Node.js for your app, you can re-use your app code to help set up and manipulate data for your tests. 
+Cypress [`cy.task()`](https://docs.cypress.io/api/commands/task.html#Requirements) is very powerful. Effectively, it allows you to use NodeJs within the context of Cypress. This can be anything from NodeJs code, to using an npm package to manipulating the database. If you use Node.js for your app, you can re-use your app code to help set up and manipulate data for your tests.
 
 There is a [Cypress recipe](https://github.com/cypress-io/cypress-example-recipes/tree/master/examples/server-communication__seeding-database-in-node) on this topic and we will end with that reference.
 
 
 <br/><br/>
-
