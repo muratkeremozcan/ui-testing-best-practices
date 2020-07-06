@@ -42,7 +42,7 @@ cy.route('some-xhr-call-that-happens-upon-landing').as('crutcXHR');
 // The default Cypress timeout is 4 seconds. 15 seconds here is arbitrary.
 // Most pages load faster, but if you need more time then increase the timeout.
 // The only caveat to increasing timeout is that the tests will take longer to fail, but still run as fast as possible when things work.
-cy.wait('@crutchXHR', {timeout: 15000}); 
+cy.wait('@crutchXHR', {timeout: 15000});
 
 // ui-element wait is straightforward, and may be optional, as well as less stable)
 cy.get('element-on-page').should('exist').and('be.visible');
@@ -53,13 +53,15 @@ cy.get('element-on-page').should('exist').and('be.visible');
 
 Pro: not having to click-navigate saves time in tests and saves effort in test maintenance.
 
-Con: this technique ignores the user e2e way of clicking through the application. Make sure you have at least one workflow in any other test that covers the same workflow of click-navigation to ensure that click-navigation functionality is regression-proof. Usually click-navigation could be a test of its own; and when setting up state in other tests, you do not repeat the ui-test that is already covered elsewhere. The thought pattern is analogous to login; if you do UI-login in one test, in the others you can implement programmatic login which is both fast and cost effective.
+Con: this technique ignores the user E2E way of clicking through the application. Make sure you have at least one workflow in any other test that covers the same workflow of click-navigation to ensure that click-navigation functionality is regression-proof. Usually click-navigation could be a test of its own; and when setting up state in other tests, you do not repeat the UI-test that is already covered elsewhere. The thought pattern is analogous to login; if you do UI-login in one test, in the others you can implement programmatic login which is both fast and cost effective.
 
 <br/><br/>
 
 ### Application actions
 
-Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from you application) access the UI directly via `cy.get()` , have access to the API and database, and even access the source code.
+Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from your application) access the UI directly via `cy.get()` , have access to the API and database, and even access the source code.
+
+Application actions are shortcuts that allows to access internal utilities in order to save time. A simple example could be a `cy.signup()` custom command that goes to the registration form and invokes directly the callback of the registration form instead of filling the form and clicking the registration button.
 
 Component testing is an experimental feature in Cypress as of version 4.7.0, albeit some of the functionality is available. Refer to component testing articles under tools section for experiments with React and Storybook on this topic.
 
@@ -70,8 +72,8 @@ Here is a quick example of how you would allow source code access to Cypress in 
 ```javascript
 // Angular Component file example
 /* setup:
- 0. Identify the component in the DOM;  
-  inspect and find the corresponding <app.. tag, 
+ 0. Identify the component in the DOM;
+  inspect and find the corresponding <app.. tag,
 
  1. Right in the constructor of your component, insert conditional */
 constructor(
@@ -87,11 +89,11 @@ constructor(
 // at ../../support/app-actions.ts helper file:
 
 /** yields  window.yourComponent */
-export const yourComponent = () => 
+export const yourComponent = () =>
   cy.window().should('have.property', 'yourComponent');
 
 /** yields the data property on your component */
-export const getSomeListData = () => 
+export const getSomeListData = () =>
  yourComponent().should('have.property', 'data');
 ```
 After this at DevTools see what that component allows for properties, or in the component code see what functions you can .invoke()
@@ -100,7 +102,7 @@ Check out [the presentation slide](https://cypress.slides.com/cypress-io/siemens
 
 #### Another example on app actions utilizing states, using [Building Operator](https://new.siemens.com/us/en/products/buildingtechnologies/automation/talon/software/building-operator.html?stc=ussi100451&sp_source=ussi100451&&s_kwcid=AL!464!3!435315652461!b!!g!!%2Bbuilding%20%2Boperator&ef_id=CjwKCAjw8df2BRA3EiwAvfZWaAsQmgot5Ph-nGBB8rW1QLLr870q2HW-qzMKhqtQb1QvlPBVJxho5BoCmtMQAvD_BwE:G:s) building control product of Siemens.
 
-In the below state diagram there are 3 states. We begin where both left and right panes exist. If the right pane is deleted (delete point / red flow), only the left pane exists. If the left pane is deleted (delete device - blue flow), both panes go away and the UI get redirected. 
+In the below state diagram there are 3 states. We begin where both left and right panes exist. If the right pane is deleted (delete point / red flow), only the left pane exists. If the left pane is deleted (delete device - blue flow), both panes go away and the UI get redirected.
 
 ![deleting building points and controllers](../../assets/images/ui-state/delete-states.PNG)
 
@@ -110,12 +112,12 @@ We already covered deleting the right pane in a UI test (red path). Why not avoi
 
 ```javascript
 it('Component test: delete right pane and then left', () => {
-  /* tests a SEQUENCE not covered with UI tests 
+  /* tests a SEQUENCE not covered with UI tests
    * tests a COMBINATION of components */
   appAction.deleteRightPane();
   cy.window().should('not.have.property', 'rightPaneComponent');
   cy.window().should('have.property', 'leftPaneComponent');
-  
+
   appAction.deleteLeftPane();
   cy.window().should('not.have.property', 'leftPaneComponent');
   cy.window().should('not.have.property', 'rightPaneComponent');
@@ -129,7 +131,7 @@ Using applications actions / having component access is fast! The tests are less
 
 There are a few counter arguments against application it. Developers may be opinionated that Cypress access to the source code is unideal. There is a not a counter argument to this until Cypress has official component testing support.
 
-The real power of application actions comes out when combining application actions with other techniques; not duplicating the ui workflow to setup a state, combining component testing with visual testing, combining component testing with network manipulation are where this approach shines.
+The real power of application actions comes out when combining application actions with other techniques; not duplicating the UI workflow to setup a state, combining component testing with visual testing, combining component testing with network manipulation are where this approach shines.
 
 
 <br/><br/>
@@ -234,9 +236,9 @@ it('should run your test', function () {
 
 #### Pro vs Con
 
-UI integration tests are the bread and butter of ui testing. They run the whole app in a real browser without hitting a real server. They are blazing fast and less exposed to random failures in the network or false negatives.
+UI integration tests are the bread and butter of UI testing. They run the whole app in a real browser without hitting a real server. They are blazing fast and less exposed to random failures in the network or false negatives.
 
-The engineers have to realize that the strength can be a curse if misused. The UI application is isolated, but network failures, if there are any, are ignored. It is great for feature branch testing, but in further deployments one should ensure that the back-end is also opertional. Refer to [test-front-end-with-integration-back-end-with-e2e](../real-life-examples/test-front-end-with-integration-back-end-with-e2e.md) for when to use which technique.
+The engineers have to realize that the strength can be a curse if misused. The UI application is isolated, but network failures, if there are any, are ignored. It is great for feature branch testing, but in further deployments one should ensure that the back-end is also operational. Refer to [test-front-end-with-integration-back-end-with-e2e](../real-life-examples/test-front-end-with-integration-back-end-with-e2e.md) for when to use which technique.
 
 <br/><br/>
 
