@@ -59,20 +59,15 @@ Con: this technique ignores the user E2E way of clicking through the application
 
 ### Application actions
 
-Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from your application) access the UI directly via `cy.get()` , have access to the API and database, and even access the source code.
+Cypress gives complete control of your application. You can bypass the page object abstraction layer (which is detached from your application), access the UI directly via `cy.get()`, have access to the API, database, and even access the source code.
 
 Application actions are shortcuts that allows to access internal utilities in order to save time. A simple example could be a `cy.signup()` custom command that goes to the registration form and invokes directly the callback of the registration form instead of filling the form and clicking the registration button.
-
-Component testing is an experimental feature in Cypress as of version 4.7.0, albeit some of the functionality is available. Refer to component testing articles under tools section for experiments with React and Storybook on this topic.
-
-![devtools > network tab](../../assets/images/ui-state/app-action.PNG)
-
 
 Here is a quick example of how you would allow source code access to Cypress in an Angular application.
 ```javascript
 // Angular Component file example
 /* setup:
- 0. Identify the component in the DOM;
+ 1. Identify the component in the DOM;
   inspect and find the corresponding <app.. tag,
 
  1. Right in the constructor of your component, insert conditional */
