@@ -7,8 +7,8 @@
 It adds value to cover a UI scenario *once*, and it provides little value to duplicate any parts of it in other tests; tests which may require a relevant state of the system. Suppose in a new test you require a state, and that state -partially or in full- duplicates testing from a UI test. Scenarios like this are excellent for utilizing certain techniques:
 
 * Direct navigation
-* Network stub record & play
 * Application actions
+* Network stub record & play
 * Seeding the database
 
 > Disclaimer: applications of the whole package of these techniques are only possible in Cypress (as far as we know), consequently the code samples below are are in Cypress context.
@@ -70,7 +70,7 @@ Here is a quick example of how you would allow source code access to Cypress in 
  1. Identify the component in the DOM;
   inspect and find the corresponding <app.. tag,
 
- 1. Right in the constructor of your component, insert conditional */
+ 2. Right in the constructor of your component, insert conditional */
 constructor(
   /* ... */
 ) {
@@ -124,7 +124,7 @@ it('Component test: delete right pane and then left', () => {
 
 Using applications actions / having component access is fast! The tests are less prone to changes. Generally this is the benefit of testing at lower level. Alas, it can get addictive to engineers and testing the user interface start getting neglected; the pro can become a con.
 
-There are a few counter arguments against application it. Developers may be opinionated that Cypress access to the source code is unideal. There is a not a counter argument to this until Cypress has official component testing support.
+There are a few counter arguments against application actions. Developers may be opinionated that Cypress access to the source code is unideal. There is a not a counter argument to this until Cypress has official component testing support.
 
 The real power of application actions comes out when combining application actions with other techniques; not duplicating the UI workflow to setup a state, combining component testing with visual testing, combining component testing with network manipulation are where this approach shines.
 
@@ -215,8 +215,6 @@ it('should run your test', function () {
   // your original test
 
   cy.wait(5000); // one-time wait so that the after() step records all the network without missing anything
-
-  // the rest of your original test
 });
 
 // playing the stubbed network

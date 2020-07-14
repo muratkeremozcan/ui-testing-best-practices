@@ -132,6 +132,17 @@ some UI utilities that make easy to use them as a development tool.
 
 🔗 [**Read More: Use your testing tool as your primary development tool**](/sections/generic-best-practices/use-your-testing-tool-as-your-primary-development-tool.md)
 
+<br/>
+
+## ![✔] 2.5 Reaching UI state for tests without using the UI
+
+**TL;DR:** As a developer who wants to ensure quality, it is important to think about cost of tests vs the value they provide. Where reasonable, strive to not duplicate effort, and still get high value by considering alternatives for setting up state for a test.
+
+**Otherwise**: costly tests that duplicate trivial operations that do not add value when repeated.
+
+🔗 [**Read More: Reaching UI state**](./sections/generic-best-practices/reaching-ui-state.md)
+
+
 <br/><br/>
 
 # `3. Server Communication Testing`
@@ -283,15 +294,6 @@ If a test cannot produce reliable results, it reduces confidence in the tests an
 **TL;DR:** Email testing is [critical for business success](https://www.industrialmarketer.com/why-email-testing-is-critical-for-email-marketing-success/). Modern services not only allow automated email testing but also provide a stateless, scalable solution while testing SaaS applications.
 
 🔗 [**Read More: Email Testing**](./sections/advanced/email-testing.md)
-
-<br/>
-
-## ![✔] 9.6 Reaching UI state for tests without using the UI
-
-**TL;DR:** As a developer who wants to ensure quality, it is important to think about cost of tests vs the value they provide. Where reasonable, strive to not duplicate effort, and still get high value by considering alternatives for setting up state for a test.
-
-🔗 [**Read More: Reaching UI state**](./sections/advanced/reaching-ui-state.md)
-
 
 <br/><br/>
 
